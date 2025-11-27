@@ -1,1 +1,2 @@
 # python
+This project explores key patterns in the Medical Insurance dataset using Python, Pandas and Matplotlib. I analyzed how age, BMI, region and number of children relate to medical charges. The visualizations include line charts, scatter plots, bar charts, a pie chart and a correlation heatmap. These plots help highlight trends such as the rise in charges with age and how BMI and family size influence costs. The goal of this work is to make the dataset easier to understand through clear and organized visual insights.
