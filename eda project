@@ -1,0 +1,61 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+a = pd.read_csv('insurance.csv')
+b = pd.DataFrame(a)
+c = b.groupby('age')['charges'].mean()
+d = b.groupby('age')['bmi'].mean()
+e = b.groupby('children')['charges'].mean()
+x=b.groupby('region')['charges'].mean()
+
+fig = plt.figure(figsize=(20,8))
+
+
+p = plt.subplot2grid((3,3),(0,0), colspan=2)
+p.plot(c.index, c.values, color='#001F54',alpha=0.7, linewidth=2)
+p.fill_between(c.index, c.values, color='blue', alpha=0.7)
+p.set_title("Average Charges by Age", fontsize=12)
+p.set_xlabel('Age', fontsize=10)
+p.set_ylabel('Charge', fontsize=10)
+
+
+p1 = plt.subplot2grid((3,3),(1,0), rowspan=2)
+scatter = p1.scatter(d.index, d.values, c=d.values, cmap='viridis', 
+                     s=80, linewidths=1.5, edgecolors='black')
+p1.set_title('Average BMI by Age', fontsize=12)
+p1.set_xlabel('Age', fontsize=10)
+p1.set_ylabel('BMI', fontsize=10)
+
+
+cbar = plt.colorbar(scatter, ax=p1)
+cbar.set_label("BMI", fontsize=10)
+
+p2 = plt.subplot2grid((3,3),(1,1), rowspan=2)
+bar_colors = ['#001F54', '#0018A8', '#8A2BE2', '#F400A1', '#00FFFF']
+bottoms= np.linspace(0.1, 0.6, len(e.index))  
+p2.bar(e.index, e.values, color=bar_colors, bottom=bottoms)
+p2.set_title("Average Charges by Number of Children", fontsize=12)
+p2.set_xlabel("Children", fontsize=11)
+p2.set_ylabel("Charges", fontsize=11)
+
+p3= plt.subplot2grid((3,3),(0,2))
+p3.pie(x.values,labels=x.index,explode=[0,0.1,0,0.15],autopct='%.1f',wedgeprops={'edgecolor':'black','linewidth':3,'alpha':0.5},shadow=True,colors=['#001F54', '#0018A8', '#8A2BE2', '#F400A1'],radius=1.1,startangle=0)
+p3.set_title("Average Charges by Region", fontsize=12)
+
+p4 = plt.subplot2grid((3,3),(1,2), rowspan=2)
+numeric_cols = ['age', 'bmi', 'children', 'charges']
+corr = b[numeric_cols].corr()
+
+sns.heatmap(corr, annot=True, cmap='Blues', linewidths= 1, ax=p4)
+
+
+p4.set_title("Correlation Heatmap", fontsize=12)
+
+
+fig.suptitle("Medical Insurance Trend", fontsize=16, ha='center', color='blue')
+
+
+plt.subplots_adjust(top=0.88, hspace=0.4, wspace=0.5)
+
+plt.show()
